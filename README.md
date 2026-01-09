@@ -16,9 +16,9 @@ EasyMenu 是一个用 Java 开发的 Android 应用，用于管理、编辑和�
 
 ## 技术栈
 
-- 语言：Java (Android)
+- 语言：Java
 - 构建工具：Gradle
-- 目标：Android (请在项目 Gradle 配置中查看 minSdk、targetSdk)
+- 目标：Android
 
 ## 快速开始
 
