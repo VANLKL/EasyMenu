@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 选中状态：显示打勾 -->
+    <item android:state_checked="true">
+        <layer-list>
+            <!-- 背景圆 -->
+            <item
+                android:width="24dp"
+                android:height="24dp">
+                <shape android:shape="oval">
+                    <solid android:color="@color/success" />
+                </shape>
+            </item>
+            <!-- 打勾图标 -->
+            <item
+                android:width="14dp"
+                android:height="14dp"
+                android:gravity="center">
+                <vector xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:width="14dp"
+                    android:height="14dp"
+                    android:viewportWidth="24"
+                    android:viewportHeight="24">
+                    <path
+                        android:fillColor="@color/on_primary"
+                        android:pathData="M9,16.17L4.83,12l-1.42,1.41L9,19L21,7l-1.41,-1.41z" />
+                </vector>
+            </item>
+        </layer-list>
+    </item>
+
+    <!-- 未选中状态：显示空心圆 -->
+    <item android:state_checked="false">
+        <layer-list>
+            <item
+                android:width="24dp"
+                android:height="24dp">
+                <shape android:shape="oval">
+                    <stroke
+                        android:width="2dp"
+                        android:color="@color/outline" />
+                    </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>
