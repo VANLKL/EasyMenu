@@ -30,6 +30,33 @@ import cn.edu.cqust.easymenu.utils.AppExecutors;
 import cn.edu.cqust.easymenu.utils.InsetUtils;
 import cn.edu.cqust.easymenu.view.adapter.MenuListAdapter;
 
+/**
+ * 菜单列表页面（View层）
+ *
+ * 【功能说明】
+ * 1. 【菜单展示】使用ListView展示菜单信息列表
+ * 2. 【菜单添加】点击添加按钮启动MenuEditActivity进行菜单添加
+ * 3. 【菜单修改】点击菜单项启动MenuEditActivity进行菜单编辑
+ * 4. 【菜单删除】长按菜单项显示操作菜单，支持单个删除和批量删除
+ * 5. 【退出登录】点击退出按钮，清除登录状态并返回登录页
+ * 6. 【搜索功能】支持按菜名和分类搜索菜单
+ *
+ * 【设计要点-本地SQLite数据库】
+ * - 使用SQLite数据库存储菜单信息（menus表）
+ * - 菜单字段包含：menu_id, name, category, price, description（不少于4个字段）
+ * - 初始数据包含10条以上的菜单记录
+ *
+ * 【设计要点-MVP设计模式】
+ * - View层：负责UI展示和用户交互
+ * - Presenter层：处理菜单业务逻辑
+ * - Model层：MenuDao负责数据持久化
+ * - 通过MenuContract接口定义View和Presenter的契约
+ *
+ * 【设计要点-适配器+ListView】
+ * - 使用MenuListAdapter适配器绑定数据到ListView
+ * - 支持普通模式和多选模式
+ * - 多选模式下显示复选框，支持批量操作
+ */
 public class MenuListActivity extends AppCompatActivity implements MenuContract.ListView {
 
     private TextView tvWelcome, tvEmpty, tvSelectedCount;

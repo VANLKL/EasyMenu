@@ -6,18 +6,33 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * SQLite 数据库帮助类
+ * 【本地SQLite数据库】SQLite数据库帮助类
+ *
+ * 【功能说明】
+ * 负责SQLite数据库的创建、升级和初始化数据
+ *
+ * 【设计要点-本地SQLite数据库】
  * 数据库名：EasyMenu.db
- * 数据库版本：1
+ * 数据库版本：2
+ *
+ * 【数据表结构】
+ * 1. users表：存储用户信息（user_id, username, password, login_status, created_at）
+ * 2. menus表：存储菜单信息（menu_id, name, category, price, description, created_at）
+ * 3. login_history表：存储登录历史（history_id, username, login_time, device_info）
+ *
+ * 【设计要点-初始数据】
+ * - 菜单表初始化时插入10条以上的菜单记录
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    /** 【本地SQLite数据库】数据库名称 */
     public static final String DB_NAME = "EasyMenu.db";
+    /** 【本地SQLite数据库】数据库版本 */
     public static final int DB_VERSION = 2; // 版本升级到2
 
     // ================== 建表 SQL ==================
 
-    // 1. 用户表 users
+    // 【本地SQLite数据库】1. 用户表 users
     private static final String SQL_CREATE_USERS =
             "CREATE TABLE users (\n" +
                     "    user_id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
@@ -27,7 +42,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n" +
                     ");";
 
-    // 2. 菜单表 menus
+    // 【本地SQLite数据库】2. 菜单表 menus（包含4个主要字段：name, category, price, description）
     private static final String SQL_CREATE_MENUS =
             "CREATE TABLE menus (\n" +
                     "    menu_id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
@@ -38,7 +53,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "    created_at DATETIME DEFAULT CURRENT_TIMESTAMP\n" +
                     ");";
 
-    // 3. 登录历史表 login_history
+    // 【本地SQLite数据库】3. 登录历史表 login_history（用于记录曾登录过的用户名）
     private static final String SQL_CREATE_LOGIN_HISTORY =
             "CREATE TABLE login_history (\n" +
                     "    history_id INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
@@ -57,8 +72,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // ================================================================
 
+    /** 单例实例，使用volatile保证可见性 */
     private static volatile DatabaseHelper instance;
 
+    /**
+     * 获取DatabaseHelper单例实例（线程安全）
+     * @param context 上下文
+     * @return DatabaseHelper实例
+     */
     public static DatabaseHelper getInstance(Context context) {
         if (instance == null) {
             synchronized (DatabaseHelper.class) {
@@ -91,9 +112,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_INDEX_LOGIN_HISTORY_USERNAME);
     }
 
+    /**
+     * 【设计要点-初始数据】初始化菜单数据
+     * 插入10条以上的菜单记录，确保数据量满足要求
+     * @param db 数据库实例
+     */
     private void initData(SQLiteDatabase db) {
         String sql = "INSERT INTO menus (name, category, price, description) VALUES (?, ?, ?, ?)";
 
+        // 【设计要点-记录不少于10条】插入10条初始菜单数据
         db.execSQL(sql, new Object[]{"宫保鸡丁", "热菜", 38.0, "经典川菜，酸甜微辣，鸡肉嫩滑"});
         db.execSQL(sql, new Object[]{"鱼香肉丝", "热菜", 28.0, "酸甜可口，下饭神器"});
         db.execSQL(sql, new Object[]{"麻婆豆腐", "热菜", 18.0, "麻辣鲜香，口感顺滑"});

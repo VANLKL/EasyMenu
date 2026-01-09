@@ -16,19 +16,47 @@ import cn.edu.cqust.easymenu.model.UserDao;
 import cn.edu.cqust.easymenu.utils.AppExecutors;
 import cn.edu.cqust.easymenu.utils.StringUtils;
 
+/**
+ * 【MVP设计模式-Presenter层】菜单业务逻辑处理器
+ *
+ * 【功能说明】
+ * 处理菜单列表和编辑页面的业务逻辑，包括菜单的增删改查、搜索、批量操作等
+ *
+ * 【设计要点-MVP设计模式】
+ * - 实现MenuContract.Presenter接口
+ * - 支持两种View：ListView（列表页）和EditView（编辑页）
+ * - 持有View接口引用，通过接口调用View方法
+ * - 负责调用Model层进行数据操作
+ *
+ * 【设计要点-本地SQLite数据库】
+ * - 通过MenuDao进行菜单数据的CRUD操作
+ * - 通过UserDao进行用户登录状态管理
+ */
 public class MenuPresenter implements MenuContract.Presenter {
 
+    /** 上下文 */
     private final Context context;
+    /** 【本地SQLite数据库】菜单数据访问对象 */
     private final MenuDao menuDao;
+    /** 【本地SQLite数据库】用户数据访问对象 */
     private final UserDao userDao;
 
+    /** 列表View接口引用 */
     private MenuContract.ListView listView;
+    /** 编辑View接口引用 */
     private MenuContract.EditView editView;
 
+    /** 是否已解绑，防止内存泄漏 */
     private volatile boolean detached = false;
 
+    /** 所有菜单数据缓存（用于搜索过滤） */
     private List<Menu> allMenus = new ArrayList<>();
 
+    /**
+     * 构造函数（列表模式）
+     * @param context 上下文
+     * @param listView 列表View接口
+     */
     public MenuPresenter(Context context, MenuContract.ListView listView) {
         this.context = context.getApplicationContext();
         this.listView = listView;

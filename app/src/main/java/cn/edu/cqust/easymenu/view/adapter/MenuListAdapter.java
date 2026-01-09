@@ -15,17 +15,40 @@ import java.util.Set;
 import cn.edu.cqust.easymenu.R;
 import cn.edu.cqust.easymenu.model.Menu;
 
+/**
+ * 【适配器+ListView】菜单列表适配器
+ *
+ * 【功能说明】
+ * 将菜单数据绑定到ListView进行展示
+ *
+ * 【设计要点-适配器+ListView】
+ * - 继承BaseAdapter实现自定义适配器
+ * - 支持普通展示模式和批量选择模式
+ * - 使用ViewHolder优化ListView性能
+ * - 多选模式下显示复选框
+ */
 public class MenuListAdapter extends BaseAdapter {
 
+    /**
+     * 菜单项操作监听接口
+     * 定义点击和长按事件回调
+     */
     public interface OnMenuActionListener {
+        /** 菜单项点击事件 */
         void onItemClick(Menu menu);
+        /** 菜单项长按事件 */
         void onItemLongClick(Menu menu);
     }
 
+    /** 上下文 */
     private final Context context;
+    /** 菜单数据列表 */
     private final List<Menu> data = new ArrayList<>();
+    /** 操作监听器 */
     private OnMenuActionListener listener;
+    /** 【菜单删除-批量删除】选中的菜单ID集合 */
     private Set<Integer> selectedMenuIds;
+    /** 【菜单删除-批量删除】是否处于选择模式 */
     private boolean isSelectionMode = false;
 
     public MenuListAdapter(Context context) {
